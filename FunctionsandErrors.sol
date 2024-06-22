@@ -9,25 +9,28 @@ contract SimpleWallet {
         owner = msg.sender;
     }
 
+    modifier onlyOwner {
+        require(msg.sender == owner, "Only the owner can call this function");
+        _; 
+    }
+
     // Function to deposit ether into the contract
     function deposit(uint256 amount) public payable {
         require(amount > 0, "Deposit amount must be greater than zero");
         balance += amount;
-        emit Deposit(msg.sender, amount);
     }
 
     // Function to withdraw ether from the contract
-    function withdraw(uint256 amount) public {
-        require(msg.sender == owner, "Only the owner can withdraw");
+    function withdraw(uint256 amount) public onlyOwner {
         require(amount <= balance, "Insufficient balance");
         uint256 oldBalance = balance;
         balance -= amount;
-        // Check the condition using assert
         assert(balance == oldBalance - amount);
+       
     }
 
-    // Function to demonstrate revert
-    function triggerRevert() public pure {
-        revert("Reverts");
+    // Revert function to handle unexpected conditions
+    function revertState() private pure {
+        revert("Transaction reverted");
     }
 }
