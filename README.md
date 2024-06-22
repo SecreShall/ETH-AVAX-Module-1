@@ -1,3 +1,6 @@
+<h1 align="center">ETH + AVAX PROOF: Intermediate EVM Course</h1>
+<h1 align="center">Functions and Errors - ETH + AVAX Project</h1>
+
 # Contract
 
 This Solidity smart contract demonstrates the usage of `require()`, `assert()`, and `revert()` statements for error handling and validation. The contract allows the owner to deposit and withdraw ether and provides functions to trigger specific error conditions.
