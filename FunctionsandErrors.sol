@@ -20,7 +20,10 @@ contract SimpleWallet {
     function withdraw(uint256 amount) public {
         require(msg.sender == owner, "Only the owner can withdraw");
         require(amount <= balance, "Insufficient balance");
+        uint256 oldBalance = balance;
         balance -= amount;
+        // Check the condition using assert
+        assert(balance == oldBalance - amount);
     }
 
     // Function to demonstrate revert
