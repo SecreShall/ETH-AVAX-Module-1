@@ -1,37 +1,15 @@
 <h1 align="center">ETH + AVAX PROOF: Intermediate EVM Course</h1>
 <h1 align="center">Functions and Errors - ETH + AVAX Project</h1>
 
-# SimpleWallet Contract
-
-This Solidity smart contract implements a simple wallet functionality allowing the owner to deposit and withdraw ether.
+## Overview
+The `SimpleLottery` smart contract is a basic implementation of a decentralized lottery system. Participants can enter the lottery by sending a minimum amount of ether, and a manager can pick a random winner who will receive the entire balance of the contract.
 
 ## Features
+- **Enter Lottery**: Users can enter the lottery by sending at least 0.01 ether.
+- **Pick Winner**: The manager can pick a winner randomly from the list of players. The winner receives the entire balance of the contract.
+- **Revert on Failure**: Uses `revert` to handle the failure of transferring the prize to the winner.
+- **Assert for Safety**: Uses `assert` to ensure that the contract balance is zero after the prize is transferred.
 
-- **Deposit Function:** Allows anyone to deposit ether into the contract.
-- **Withdraw Function:** Allows the contract owner to withdraw ether from the contract.
-- **OnlyOwner Modifier:** Restricts certain functions to be callable only by the contract owner.
-- **Revert Function:** Demonstrates a private function that reverts the transaction.
-
-## Usage
-
-1. **Deposit Ether:**
-   - Use the `deposit(uint256 amount)` function to deposit ether into the contract.
-   - Ensure the `amount` parameter is greater than zero.
-
-2. **Withdraw Ether:**
-   - Use the `withdraw(uint256 amount)` function to withdraw ether from the contract.
-   - Only the contract owner can call this function.
-   - Ensure the `amount` parameter does not exceed the contract balance.
-
-## Contract Details
-
-- **Balance:** Public variable `balance` shows the current balance of ether held by the contract.
-- **Owner:** Public variable `owner` represents the address of the contract owner, set during contract deployment.
-
-## Error Handling
-
-- The contract includes basic error handling using `require` statements to check conditions before executing transactions.
-- The `revertState()` function is a private function demonstrating how to revert a transaction with a custom message.
 
 ## License
 
