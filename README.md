@@ -3,7 +3,7 @@
 
 ## Overview
 
-ToDoList is a Solidity smart contract designed to manage a simple to-do list. It allows adding new items, marking items as completed, and retrieving item details. This README focuses on error handling using `require()`, `assert()`, and `revert()`.
+ToDoList is a Solidity smart contract designed to manage a simple to-do list. It allows adding new items, marking items as completed, and retrieving item details. This README focuses on error handling using `require()`, `revert()`, and `assert()`.
 
 ## Features
 
@@ -15,15 +15,18 @@ ToDoList is a Solidity smart contract designed to manage a simple to-do list. It
 
 ### `require(condition, message)`
 
-- Used in `completeItem(uint itemId)`: Ensures the item ID is valid before marking an item as completed. If `items[itemId].id` is not greater than 0, the function execution will revert with the message "Invalid item ID".
+- **Usage**: Ensures the item ID is valid before marking an item as completed in `completeItem(uint itemId)`.
+- **Effect**: If `items[itemId].id` is not greater than 0, the function execution will revert with the message "Invalid item ID".
 
 ### `revert(message)`
 
-- Used in `getItem(uint itemId)`: Checks if an item exists by verifying if `items[itemId].id` is 0. If true, the function execution will revert with the message "Item does not exist".
+- **Usage**: Checks if an item exists in `getItem(uint itemId)`.
+- **Effect**: If `items[itemId].id` is 0, the function execution will revert with the message "Item does not exist".
 
 ### `assert(condition)`
 
-- Used in `getItem(uint itemId)`: After confirming an item exists (using `revert()`), `assert()` is used to ensure the item ID retrieved (`item.id`) is greater than 0. This acts as an additional sanity check to detect unexpected conditions during execution.
+- **Usage**: Asserts internal consistency after verifying an item exists in `getItem(uint itemId)`.
+- **Effect**: Ensures `items[itemId].id` is greater than 0. Used as a sanity check to detect unexpected conditions.
 
 ## Solidity Version
 
