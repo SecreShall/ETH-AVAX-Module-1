@@ -23,13 +23,24 @@ contract ToDoList {
 
   // Function to mark a to-do item as completed
   function completeItem(uint itemId) public {
+    // Check if item ID is valid
     require(items[itemId].id > 0, "Invalid item ID");
+
+    // Mark item as completed
     items[itemId].completed = true;
   }
 
   // Function to retrieve a specific to-do item (view function)
   function getItem(uint itemId) public view returns (uint id, string memory text, bool completed) {
+    // Check if item exists
+    if (items[itemId].id == 0) {
+      revert("Item does not exist");
+    }
+    
+    // Assert for internal consistency
     assert(items[itemId].id > 0);
+
+    // Retrieve item details
     Item memory item = items[itemId];
     return (item.id, item.text, item.completed);
   }
