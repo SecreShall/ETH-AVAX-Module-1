@@ -1,36 +1,36 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract SimpleWallet {
-    uint256 public balance;
-    address public owner;
+contract SimpleLottery {
+    address public manager;
+    address[] public players;
 
     constructor() {
-        owner = msg.sender;
+        manager = msg.sender;
     }
 
-    modifier onlyOwner {
-        require(msg.sender == owner, "Only the owner can call this function");
-        _; 
+    function enter() public payable {
+        require(msg.value > .01 ether, "Minimum ether required is .01");
+        players.push(msg.sender);
     }
 
-    // Function to deposit ether into the contract
-    function deposit(uint256 amount) public payable {
-        require(amount > 0, "Deposit amount must be greater than zero");
-        balance += amount;
+    function pickWinner() public {
+        require(msg.sender == manager, "Only the manager can call this function");
+        require(players.length > 0, "No players in the lottery");
+
+        uint256 index = random() % players.length;
+        address winner = players[index];
+        
+        (bool success, ) = winner.call{ value: address(this).balance }("");
+        if (!success) {
+            revert("Transfer to winner failed");
+        }
+
+        assert(address(this).balance == 0);
+        players = new address ; // Reset the players array for the next lottery
     }
 
-    // Function to withdraw ether from the contract
-    function withdraw(uint256 amount) public onlyOwner {
-        require(amount <= balance, "Insufficient balance");
-        uint256 oldBalance = balance;
-        balance -= amount;
-        assert(balance == oldBalance - amount);
-       
-    }
-
-    // Revert function to handle unexpected conditions
-    function revertState() private pure {
-        revert("Transaction reverted");
+    function random() private view returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(block.difficulty, block.timestamp, players)));
     }
 }
