@@ -1,36 +1,36 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract SimpleLottery {
-    address public manager;
-    address[] public players;
+contract ToDoList {
+  // Structure to store a to-do item
+  struct Item {
+    uint id;
+    string text;
+    bool completed;
+  }
 
-    constructor() {
-        manager = msg.sender;
-    }
+  // Mapping to store to-do items by ID (private)
+  mapping(uint => Item) private items;
 
-    function enter() public payable {
-        require(msg.value > .01 ether, "Minimum ether required is .01");
-        players.push(msg.sender);
-    }
+  // Keeps track of the next item ID
+  uint public nextItemId = 1;
 
-    function pickWinner() public {
-        require(msg.sender == manager, "Only the manager can call this function");
-        require(players.length > 0, "No players in the lottery");
+  // Function to add a new to-do item
+  function addItem(string memory text) public {
+    items[nextItemId] = Item(nextItemId, text, false);
+    nextItemId++;
+  }
 
-        uint256 index = random() % players.length;
-        address winner = players[index];
-        
-        (bool success, ) = winner.call{ value: address(this).balance }("");
-        if (!success) {
-            revert("Transfer to winner failed");
-        }
+  // Function to mark a to-do item as completed
+  function completeItem(uint itemId) public {
+    require(items[itemId].id > 0, "Invalid item ID");
+    items[itemId].completed = true;
+  }
 
-        assert(address(this).balance == 0);
-        players = new address ; // Reset the players array for the next lottery
-    }
-
-    function random() private view returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(block.difficulty, block.timestamp, players)));
-    }
+  // Function to retrieve a specific to-do item (view function)
+  function getItem(uint itemId) public view returns (uint id, string memory text, bool completed) {
+    assert(items[itemId].id > 0);
+    Item memory item = items[itemId];
+    return (item.id, item.text, item.completed);
+  }
 }
