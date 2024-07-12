@@ -24,10 +24,12 @@ contract SubscriptionService {
     function subscribe() public {
         uint newExpiry = block.timestamp + DURATION;
 
+        // Check if the user already has a subscription
         if (subscriptions[msg.sender].expiry > block.timestamp) {
             newExpiry = subscriptions[msg.sender].expiry + DURATION;
         }
 
+        // Update the subscription
         subscriptions[msg.sender] = Subscription(msg.sender, newExpiry);
         emit Subscribed(msg.sender, newExpiry);
     }
@@ -35,7 +37,9 @@ contract SubscriptionService {
     // Function to unsubscribe
     function unsubscribe() public {
         // Check if user is subscribed and that the subscription is still valid
-        require(subscriptions[msg.sender].expiry > block.timestamp, "You are not subscribed");
+        if (subscriptions[msg.sender].expiry <= block.timestamp) {
+            revert("You are not subscribed");
+        }
 
         delete subscriptions[msg.sender];
         emit Unsubscribed(msg.sender);
@@ -48,9 +52,13 @@ contract SubscriptionService {
 
     // Function to get subscription details
     function getSubscription(address user) public view returns (address, uint) {
+        // Check if the user is subscribed
         if (subscriptions[user].expiry == 0) {
             revert("User is not subscribed");
         }
+
+        // Assert that the user address matches the stored subscription
+        assert(subscriptions[user].user == user);
 
         return (subscriptions[user].user, subscriptions[user].expiry);
     }
