@@ -37,9 +37,7 @@ contract SubscriptionService {
     // Function to unsubscribe
     function unsubscribe() public {
         // Check if user is subscribed and that the subscription is still valid
-        if (subscriptions[msg.sender].expiry <= block.timestamp) {
-            revert("You are not subscribed");
-        }
+        require(subscriptions[msg.sender].expiry > block.timestamp, "You are not subscribed");
 
         delete subscriptions[msg.sender];
         emit Unsubscribed(msg.sender);
